@@ -1,4 +1,5 @@
 import { getRandomArrayElement } from '../util.js';
+import { nanoid } from 'nanoid';
 
 const COMMENT_AUTHORS = [
   'DecaDD',
@@ -41,7 +42,7 @@ const COMMENTS_TEXT = [
 
 const mockComments = [
   {
-    id: 1,
+    id: nanoid(),
     author: getRandomArrayElement(COMMENT_AUTHORS),
     commentText: getRandomArrayElement(COMMENTS_TEXT),
     date: getRandomArrayElement(COMMENT_DATES),
@@ -49,7 +50,7 @@ const mockComments = [
   },
 
   {
-    id: 2,
+    id: nanoid(),
     author: getRandomArrayElement(COMMENT_AUTHORS),
     commentText: getRandomArrayElement(COMMENTS_TEXT),
     date: getRandomArrayElement(COMMENT_DATES),
@@ -57,7 +58,7 @@ const mockComments = [
   },
 
   {
-    id: 3,
+    id: nanoid(),
     author: getRandomArrayElement(COMMENT_AUTHORS),
     commentText: getRandomArrayElement(COMMENTS_TEXT),
     date: getRandomArrayElement(COMMENT_DATES),
@@ -65,7 +66,7 @@ const mockComments = [
   },
 
   {
-    id: 4,
+    id: nanoid(),
     author: getRandomArrayElement(COMMENT_AUTHORS),
     commentText: getRandomArrayElement(COMMENTS_TEXT),
     date: getRandomArrayElement(COMMENT_DATES),

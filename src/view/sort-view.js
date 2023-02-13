@@ -1,30 +1,30 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SortMode } from '../mock/const.js';
+import { SortType } from '../mock/const.js';
 
-function createFilmSortTemplate(currentSort) {
+function createFilmSortTemplate(currentSortType) {
   return `
     <ul class="sort">
-      <li><a href="#" class="sort__button  ${currentSort === SortMode.DEFAULT ? 'sort__button--active' : ''}"  data-sort-type="${SortMode.DEFAULT}" >Sort by default</a></li>
-      <li><a href="#" class="sort__button ${currentSort === SortMode.BY_DATE ? 'sort__button--active' : ''}" data-sort-type="${SortMode.BY_DATE}">Sort by date</a></li>
-      <li><a href="#" class="sort__button ${currentSort === SortMode.BY_RATING ? 'sort__button--active' : ''}" data-sort-type="${SortMode.BY_RATING}">Sort by rating</a></li>
+      <li><a href="#" class="sort__button  ${currentSortType === SortType.DEFAULT ? 'sort__button--active' : ''}"  data-sort-type="${SortType.DEFAULT}" >Sort by default</a></li>
+      <li><a href="#" class="sort__button ${currentSortType === SortType.BY_DATE ? 'sort__button--active' : ''}" data-sort-type="${SortType.BY_DATE}">Sort by date</a></li>
+      <li><a href="#" class="sort__button ${currentSortType === SortType.BY_RATING ? 'sort__button--active' : ''}" data-sort-type="${SortType.BY_RATING}">Sort by rating</a></li>
     </ul>
   `;
 }
 
 export default class Sort extends AbstractView {
-
+  #currentSortType = 'default';
   #handleSortTypeChange = null;
-  #currentSort = 'default';
 
-  constructor({ onSortTypeChange }) {
+  constructor({ currentSortType, onSortTypeChange }) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
+    this.#currentSortType = currentSortType;
 
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createFilmSortTemplate(this.#currentSort);
+    return createFilmSortTemplate(this.#currentSortType);
   }
 
   #sortTypeChangeHandler = (evt) => {
@@ -32,7 +32,7 @@ export default class Sort extends AbstractView {
     if (evt.target.tagName !== 'A') {
       return;
     }
-    this.#currentSort = evt.target.dataset.sortType;
+    this.#currentSortType = evt.target.dataset.sortType;
     evt.preventDefault();
     createFilmSortTemplate();
     this.#handleSortTypeChange(evt.target.dataset.sortType);

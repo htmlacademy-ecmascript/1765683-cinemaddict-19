@@ -1,11 +1,34 @@
-import { getRandomComment } from '../mock/comment.js';
+import Observable from '../framework/observable.js';
 
-const COMMENTS_LIST_LENGTH = 6;
+export default class CommentsModel extends Observable {
+  #commentsApiService = null;
 
-export default class CommentsModel {
-  #comments = Array.from({ length: COMMENTS_LIST_LENGTH }, getRandomComment);
+  constructor({commentsApiService}) {
+    super();
+    this.#commentsApiService = commentsApiService;
+  }
 
-  getComments() {
-    return this.#comments;
+  async getComments(filmId) {
+    return await this.#commentsApiService.getComments(filmId);
+  }
+
+  async addComment(updateType, update) {
+    try {
+      this.#commentsApiService.addComment(update.id, update.commentToAdd);
+      delete update.commentToAdd;
+      this._notify(updateType, update);
+    } catch(err) {
+      throw new Error('Can\'t add comment');
+    }
+  }
+
+  async deleteComment(updateType, update) {
+    try {
+      this.#commentsApiService.deleteComment(update.commentToDelete.id);
+      delete update.commentToDelete;
+      this._notify(updateType, update);
+    } catch(err) {
+      throw new Error('Can\'t delete comment');
+    }
   }
 }

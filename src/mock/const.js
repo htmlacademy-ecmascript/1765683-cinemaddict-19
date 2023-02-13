@@ -1,15 +1,48 @@
 import { getRandomArrayElement } from '../util.js';
 
+const FILM_COUNT_PER_STEP = 5;
+/*
+const filter = [
+  {
+    type: 'all',
+    name: 'ALL',
+    count: 0,
+  },
+];*/
+
+
 const BOOLEAN = [true, false];
 
-const FilterType = {
-  all: 'All Movies',
-  watchlist: 'Watchlist',
-  history: 'History',
-  favorite: 'Favorite',
+const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
-const SortMode = {
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT'
+};
+
+
+const FilterType = {
+  ALL: 'All Movies',
+  WATCHLIST: 'Watchlist',
+  HISTORY: 'History',
+  FAVORITE: 'Favorite',
+};
+
+
+const filter = {
+  [FilterType.ALL]: (films) => films,
+  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITE]: (films) => films.filter((film) => film.userDetails.favorite),
+};
+
+const SortType = {
   DEFAULT: 'default',
   BY_DATE: 'by-date',
   BY_RATING: 'by-rating',
@@ -36,4 +69,4 @@ const getUserProfile = () => ({
   userRank: SOME_RANK,
 });
 
-export { BOOLEAN, FilterType, SOME_POSTER, getUserProfile, SortMode };
+export { FILM_COUNT_PER_STEP, BOOLEAN, FilterType, SOME_POSTER, getUserProfile, SortType, UserAction, UpdateType, filter };

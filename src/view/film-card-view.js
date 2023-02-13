@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeFilmDueDate, getComments, getRandomArrayElement } from '../util.js';
+import { humanizeFilmDueDate, getComments } from '../util.js';
 
 function createFilmCardTemplate(film) {
   const {
@@ -26,7 +26,7 @@ function createFilmCardTemplate(film) {
             <p class="film-card__info">
               <span class="film-card__year">${humanizeFilmDueDate(release.date)}</span>
               <span class="film-card__duration">${duration}</span>
-              <span class="film-card__genre">${getRandomArrayElement(genres)}</span>
+              <span class="film-card__genre">${genres.slice(0, 1)}</span>
             </p>
             <img src="./${poster}" alt="${title}" class="film-card__poster">
             <p class="film-card__description">${description}</p>

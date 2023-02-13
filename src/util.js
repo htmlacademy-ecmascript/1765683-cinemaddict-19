@@ -66,10 +66,6 @@ function getRandomUniqArrayElement(items) {
   return result;
 }
 
-function updateItem(items, update) {
-  return items.map((item) => (item.id === update.id ? update : item));
-}
-
 const sortRating = (filmA, filmB) =>
   filmA.filmInfo.totalRating > filmB.filmInfo.totalRating ? -1 : 1;
 
@@ -85,7 +81,6 @@ export {
   getTime,
   getComments,
   humanizeCommentsDueDate,
-  updateItem,
   sortRating,
   sortDate,
 };

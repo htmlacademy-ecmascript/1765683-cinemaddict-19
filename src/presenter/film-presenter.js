@@ -1,6 +1,7 @@
 import FilmCard from '../view/film-card-view';
 import FilmPopup from '../view/film-popup-view';
 import { render, remove, replace } from '../framework/render';
+import { UserAction, UpdateType } from '../mock/const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -21,17 +22,16 @@ export default class FilmPresenter {
   #handleModeChange = null;
   #popupScrollTop = null;
 
-  constructor({ commentsModel, filmListContainer, onFilmChange, onModeChange }) {
+  constructor({ commentsModel, filmListContainer, onFilmChange, onModeChange, addComment }) {
     this.#filmListContainer = filmListContainer;
     this.#commentsModel = commentsModel;
     this.#handleFilmChange = onFilmChange;
     this.#handleModeChange = onModeChange;
+    this.addComment = addComment;
   }
 
   init(film) {
-    this.#comments = this.#commentsModel
-      .getComments()
-      .filter((comment) => film.comments.includes(comment.id));
+    this.#comments = this.#commentsModel.getComments().filter((comment) => film.comments.includes(comment.id));
 
     this.#film = film;
 
@@ -53,10 +53,12 @@ export default class FilmPresenter {
       },
       onCloseClick: this.#closePopup,
       scrollPosition: this.#popupScrollTop,
-      onWatchListClick: this.#handleWatchListClick,
-      onWatchedClick: this.#handleWatchedClick,
-      onFavoriteClick: this.#handleFavoriteClick,
+      onWatchListClick: this.#handlePopUpFilterClick,
+      onWatchedClick: this.#handlePopUpFilterClick,
+      onFavoriteClick: this.#handlePopUpFilterClick,
       onScroll: this.#popupScrollPosHandler,
+      addComment: this.#addComment,
+      deleteComment: this.#deleteComment
     });
 
     if (prevFilmCardComponent === null || prevFilmPopupComponent === null) {
@@ -79,7 +81,6 @@ export default class FilmPresenter {
 
   destroy() {
     remove(this.#filmCardComponent);
-    remove(this.#filmPopupComponent);
   }
 
   #escKeyDownHandler = (evt) => {
@@ -108,7 +109,7 @@ export default class FilmPresenter {
   };
 
   #handleWatchListClick = () => {
-    this.#handleFilmChange({
+    this.#handleFilmChange(UserAction.UPDATE_FILM, UpdateType.MINOR, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -118,7 +119,7 @@ export default class FilmPresenter {
   };
 
   #handleWatchedClick = () => {
-    this.#handleFilmChange({
+    this.#handleFilmChange(UserAction.UPDATE_FILM, UpdateType.MINOR, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -128,7 +129,7 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleFilmChange({
+    this.#handleFilmChange(UserAction.UPDATE_FILM, UpdateType.MINOR, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -146,5 +147,20 @@ export default class FilmPresenter {
   #popupScrollPosHandler = (offset) => {
     this.#popupScrollTop = offset;
     this.#filmPopupComponent.updateScrollPosition(offset);
+  };
+
+  #handlePopUpFilterClick = (userDetails) => {
+    this.#handleFilmChange(UserAction.UPDATE_FILM, UpdateType.MINOR, {
+      ...this.#film,
+      userDetails,
+    });
+  };
+
+  #addComment = (data) => {
+    this.#handleFilmChange(UserAction.ADD_COMMENT, UpdateType.PATCH, { film: this.#film, data });
+  };
+
+  #deleteComment = (data) => {
+    this.#handleFilmChange(UserAction.DELETE_COMMENT, UpdateType.PATCH, { film: this.#film, data });
   };
 }
